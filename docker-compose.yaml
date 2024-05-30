@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+
+  bank_db:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+      POSTGRES_DB: banking_db
+    ports:
+      - "5432:5432"
+
+  bank:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/code
+      - type: bind
+        source: README.md
+        target: /code/README.md
+    image: bank:latest
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - bank_db
